@@ -1,0 +1,77 @@
+@page "/calculator"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Calculator</PageTitle>
+<h3>Simple Calculator</h3>
+
+<!-- Calculator UI -->
+<div class="calculator">
+    <input type="text" class="display" value="@currentInput" disabled />
+    
+    <div class="buttons">
+        <button @onclick="() => AddToInput(Convert.ToString(1))">1</button>
+        <button @onclick="() => AddToInput(Convert.ToString(2))">2</button>
+        <button @onclick="() => AddToInput(Convert.ToString(3))">3</button>
+        <button @onclick="() => AddToInput(Convert.ToString('+'))">+</button>
+        
+        <button @onclick="() => AddToInput(Convert.ToString(4))">4</button>
+        <button @onclick="() => AddToInput(Convert.ToString(5))">5</button>
+        <button @onclick="() => AddToInput(Convert.ToString(6))">6</button>
+        <button @onclick="() => AddToInput(Convert.ToString('-'))">-</button>
+        
+        <button @onclick="() => AddToInput(Convert.ToString(7))">7</button>
+        <button @onclick="() => AddToInput(Convert.ToString(8))">8</button>
+        <button @onclick="() => AddToInput(Convert.ToString(9))">9</button>
+        <button @onclick="() => AddToInput(Convert.ToString('*'))">*</button>
+        
+        <button @onclick="() => AddToInput(Convert.ToString(0))">0</button>
+        <button @onclick="ClearInput">C</button>
+        <button @onclick="CalculateResult">=</button>
+        <button @onclick="() => AddToInput(Convert.ToString('/'))">/</button>
+    </div>
+</div>
+
+
+<!-- Navigation Buttons -->
+<div>
+    <button @onclick="NavigateToHome">Go to Home</button>
+    <button @onclick="NavigateToCounter">Go to Counter</button>
+</div>
+
+@code {
+    private string currentInput = "";  // Initialized to an empty string to avoid null warning
+
+    private void AddToInput(string value)
+    {
+        currentInput += value!;
+    }
+
+    private void ClearInput()
+    {
+        currentInput = "";
+    }
+
+    private void CalculateResult()
+    {
+        try
+        {
+            var result = new System.Data.DataTable().Compute(currentInput, null);
+            currentInput = result?.ToString() ?? "0";
+        }
+        catch
+        {
+            currentInput = "Error";
+        }
+    }
+
+    // Navigation methods
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void NavigateToCounter()
+    {
+        NavigationManager.NavigateTo("/counter");
+    }
+}
